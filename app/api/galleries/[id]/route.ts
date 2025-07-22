@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
 import { ApiResponse, Gallery } from "@/types";
+import { mockGalleries } from "@/lib/mockData";
+
+// Try to import Prisma, fallback to mock data if not available
+let prisma: any = null;
+try {
+  const { prisma: prismaClient } = require("@/lib/db");
+  prisma = prismaClient;
+} catch (error) {
+  console.log("Prisma not available, using mock data");
+}
 
 export async function GET(
   request: NextRequest,
@@ -17,18 +26,26 @@ export async function GET(
       return NextResponse.json(response, { status: 400 });
     }
 
-    const gallery = await prisma.gallery.findUnique({
-      where: {
-        id: galleryId,
-      },
-      include: {
-        images: {
-          orderBy: {
-            createdAt: "desc",
+    let gallery: Gallery | null = null;
+
+    if (prisma) {
+      // Use real database
+      gallery = await prisma.gallery.findUnique({
+        where: {
+          id: galleryId,
+        },
+        include: {
+          images: {
+            orderBy: {
+              createdAt: "desc",
+            },
           },
         },
-      },
-    });
+      });
+    } else {
+      // Use mock data
+      gallery = mockGalleries.find(g => g.id === galleryId) || null;
+    }
 
     if (!gallery) {
       const response: ApiResponse<Gallery | null> = {
