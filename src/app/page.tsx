@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { Spinner } from "@heroui/react";
 import { AlbumGrid } from "@/components/AlbumGrid";
 
 async function getAlbums() {
@@ -66,7 +65,7 @@ async function getAlbums() {
 function LoadingSpinner() {
   return (
     <div className="flex justify-center items-center py-12">
-      <Spinner size="lg" />
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100"></div>
     </div>
   );
 }

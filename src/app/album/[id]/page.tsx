@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
-import { Button, Spinner } from "@heroui/react";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { PhotoGrid } from "@/components/PhotoGrid";
@@ -86,7 +85,7 @@ async function getAlbum(id: string): Promise<AlbumWithPhotos | null> {
 function LoadingSpinner() {
   return (
     <div className="flex justify-center items-center py-12">
-      <Spinner size="lg" />
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-100"></div>
     </div>
   );
 }
@@ -109,15 +108,13 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
     <div className="container mx-auto px-4 py-8">
       {/* Header Section */}
       <div className="mb-8">
-        <Button
-          as={Link}
+        <Link
           href="/"
-          variant="ghost"
-          startContent={<ArrowLeftIcon className="h-4 w-4" />}
-          className="mb-6"
+          className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-md bg-default-100 hover:bg-default-200 transition-colors"
         >
+          <ArrowLeftIcon className="h-4 w-4" />
           Back to Gallery
-        </Button>
+        </Link>
         
         <div className="text-center">
           <h1 className="text-4xl font-bold text-foreground mb-4">
